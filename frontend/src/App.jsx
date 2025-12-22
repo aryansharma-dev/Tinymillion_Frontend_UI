@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -23,8 +23,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  const location = useLocation();
+  
+  // Check if current route is Home page
+  const isHomePage = location.pathname === '/';
+
   return (
-    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+    <div className={isHomePage ? '' : 'px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'}>
       <ToastContainer />
 
       <Routes>

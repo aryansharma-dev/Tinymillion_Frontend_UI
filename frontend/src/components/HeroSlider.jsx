@@ -135,7 +135,7 @@ const HeroSlider = () => {
         slidesPerView={1}
         effect="fade"
         autoplay={{
-          delay: 6000,
+          delay: 3000,
           disableOnInteraction: false,
           pauseOnMouseEnter: true
         }}

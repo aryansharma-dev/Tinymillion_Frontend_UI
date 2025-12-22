@@ -89,15 +89,7 @@ const HeroSlider = () => {
   ];
 
   // Categories for floating bar
-  const categories = [
-    { icon: "👔", name: "T-Shirts", link: "/collection?category=tshirts" },
-    { icon: "👗", name: "Women", link: "/collection?category=women" },
-    { icon: "👟", name: "Sneakers", link: "/collection?category=sneakers" },
-    { icon: "💼", name: "Accessories", link: "/collection?category=accessories" },
-    { icon: "🏠", name: "Hoodies", link: "/collection?category=hoodies" },
-    { icon: "👖", name: "Joggers", link: "/collection?category=joggers" }
-  ];
-
+ 
   // Handle video play/pause on slide change
   const handleSlideChange = (swiper) => {
     const currentIndex = swiper.realIndex;
@@ -135,7 +127,7 @@ const HeroSlider = () => {
         slidesPerView={1}
         effect="fade"
         autoplay={{
-          delay: 3000,
+          delay: 2000,
           disableOnInteraction: false,
           pauseOnMouseEnter: true
         }}
@@ -384,42 +376,6 @@ const HeroSlider = () => {
           </svg>
         </div>
       </Swiper>
-
-      {/* Floating Category Bar */}
-      <motion.div
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="absolute bottom-8 left-0 right-0 z-30"
-      >
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-4 border border-gray-200">
-            <div className="flex items-center justify-between overflow-x-auto gap-2 scrollbar-hide">
-              <p className="text-sm font-bold text-gray-900 whitespace-nowrap pr-4 border-r border-gray-300">
-                Shop by Category
-              </p>
-              {categories.map((category, index) => (
-                <motion.a
-                  key={index}
-                  href={category.link}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.3 + index * 0.1 }}
-                  whileHover={{ y: -5, scale: 1.05 }}
-                  className="flex flex-col items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100 transition-all duration-300 group cursor-pointer min-w-[80px]"
-                >
-                  <span className="text-3xl group-hover:scale-125 transition-transform duration-300">
-                    {category.icon}
-                  </span>
-                  <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">
-                    {category.name}
-                  </span>
-                </motion.a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </motion.div>
 
       {/* Custom Pagination & Styles */}
       <style jsx>{`

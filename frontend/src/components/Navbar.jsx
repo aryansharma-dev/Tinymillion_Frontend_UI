@@ -168,7 +168,7 @@ const Navbar = () => {
 
                         <NavLink
                             to='/collection'
-                            onMouseEnter={() => setActiveNav('men')}
+                            onMouseEnter={() => setActiveNav('collection')}
                             className={({ isActive }) =>
                                 `relative text-sm font-bold tracking-wider transition-all duration-300 py-2 group ${isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
                                 }`
@@ -176,42 +176,8 @@ const Navbar = () => {
                         >
                             {({ isActive }) => (
                                 <>
-                                    MEN
+                                    COLLECTION
                                     <span className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600 rounded-full transition-all duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                                        }`}></span>
-                                </>
-                            )}
-                        </NavLink>
-
-                        <NavLink
-                            to='/collection'
-                            onMouseEnter={() => setActiveNav('women')}
-                            className={({ isActive }) =>
-                                `relative text-sm font-bold tracking-wider transition-all duration-300 py-2 group ${isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                                }`
-                            }
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    WOMEN
-                                    <span className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-pink-600 via-pink-400 to-pink-600 rounded-full transition-all duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                                        }`}></span>
-                                </>
-                            )}
-                        </NavLink>
-
-                        <NavLink
-                            to='/collection'
-                            onMouseEnter={() => setActiveNav('accessories')}
-                            className={({ isActive }) =>
-                                `relative text-sm font-bold tracking-wider transition-all duration-300 py-2 group ${isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                                }`
-                            }
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    ACCESSORIES
-                                    <span className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 via-purple-400 to-purple-600 rounded-full transition-all duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                                         }`}></span>
                                 </>
                             )}
@@ -236,7 +202,7 @@ const Navbar = () => {
 
                         <NavLink
                             to='/about'
-                            onMouseEnter={() => setActiveNav('offers')}
+                            onMouseEnter={() => setActiveNav('about')}
                             className={({ isActive }) =>
                                 `relative text-sm font-bold tracking-wider transition-all duration-300 py-2 group ${isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
                                 }`
@@ -244,12 +210,30 @@ const Navbar = () => {
                         >
                             {({ isActive }) => (
                                 <>
-                                    OFFERS 🔥
+                                    ABOUT US 
                                     <span className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-600 via-orange-400 to-red-600 rounded-full transition-all duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                                         }`}></span>
                                 </>
                             )}
                         </NavLink>
+
+                        <NavLink
+                            to='/contact'
+                            onMouseEnter={() => setActiveNav('contact')}
+                            className={({ isActive }) =>
+                                `relative text-sm font-bold tracking-wider transition-all duration-300 py-2 group ${isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                                }`
+                            }
+                        >
+                            {({ isActive }) => (
+                                <>
+                                    CONTACT US 
+                                    <span className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-600 via-orange-400 to-red-600 rounded-full transition-all duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                                        }`}></span>
+                                </>
+                            )}
+                        </NavLink>
+
                     </div>
 
                     {/* Right Icons - Desktop */}

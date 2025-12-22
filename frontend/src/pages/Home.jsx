@@ -1,11 +1,12 @@
 import LatestCollection from '../components/LatestCollection'
+import MostPurchase from '../components/MostPurchase'
 import BestSeller from '../components/BestSeller'
-import OurPolicy from '../components/OurPolicy'
 import NewsletterBox from '../components/NewsletterBox'
 import HeroSlider from '../components/HeroSlider'
 import CategoryGrid from '../components/CategoryGrid'
 import FeaturedMiniStores from '../components/FeaturedMiniStores'
 import usePageMetadata from '../hooks/usePageMetadata'
+import FlashSale from '../components/FlashSale'
 import { motion } from 'framer-motion'
 import { TrendingUp, Shield, Truck, RotateCcw, Headphones, Award } from 'lucide-react'
 
@@ -63,39 +64,26 @@ const Home = () => {
     <div>
       {/* Hero Slider */}
       <HeroSlider />
-      
+
       {/* Category Grid */}
       <CategoryGrid />
+
+      {/* Most Purchased Products */}
+      <MostPurchase />
 
       {/* Latest Collection */}
       <section className="container mx-auto px-4 py-16">
         <LatestCollection />
       </section>
 
+      {/* Flash Sale */}
+      <FlashSale />
+
       {/* Best Seller */}
       <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <BestSeller />
         </div>
-      </section>
-
-      {/* Featured Mini Stores */}
-      <section className="container mx-auto px-4 py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Featured Mini Stores
-          </h2>
-          <p className="text-gray-600 text-lg">
-            Discover curated collections from our creators
-          </p>
-        </motion.div>
-        <FeaturedMiniStores />
       </section>
 
       {/* Why Choose Us */}
@@ -137,13 +125,6 @@ const Home = () => {
               </p>
             </motion.div>
           ))}
-        </div>
-      </section>
-
-      {/* Our Policy */}
-      <section className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <OurPolicy />
         </div>
       </section>
 

@@ -1,7 +1,12 @@
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, TrendingUp } from 'lucide-react';
+import { ArrowRight, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const CategoryGrid = () => {
+  const carouselRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const categories = [
     {
       id: 1,
@@ -53,31 +58,39 @@ const CategoryGrid = () => {
     }
   ];
 
-  // Container animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (isPaused) return;
 
-  // Card animation variants
-  const cardVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 50,
-      scale: 0.9
-    },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        const cardWidth = 300; // Width of one card + gap
+        const maxScroll = carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
+        const nextScroll = carouselRef.current.scrollLeft + cardWidth;
+
+        if (nextScroll >= maxScroll) {
+          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+          setCurrentIndex(0);
+        } else {
+          carouselRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+          setCurrentIndex(prev => prev + 1);
+        }
+      }
+    }, 3000); // Slide every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
+  const scrollCarousel = (direction) => {
+    if (carouselRef.current) {
+      const cardWidth = 300;
+      const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
+      carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      
+      if (direction === 'left') {
+        setCurrentIndex(prev => Math.max(0, prev - 1));
+      } else {
+        setCurrentIndex(prev => Math.min(categories.length - 1, prev + 1));
       }
     }
   };
@@ -122,82 +135,166 @@ const CategoryGrid = () => {
           </p>
         </motion.div>
 
-        {/* Category Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8"
-        >
-          {categories.map((category, index) => (
-            <motion.a
-              key={category.id}
-              href={category.link}
-              variants={cardVariants}
-              whileHover={{ 
-                y: -12,
-                rotateX: 5,
-                rotateY: index % 2 === 0 ? -5 : 5,
-                transition: { duration: 0.3 }
-              }}
-              className="group relative block perspective-1000"
+        {/* Carousel Container */}
+        <div className="relative">
+          {/* Navigation Buttons */}
+          <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 z-20 pointer-events-none justify-between px-4">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => scrollCarousel('left')}
+              className="pointer-events-auto p-4 bg-white/90 backdrop-blur-md rounded-full shadow-xl hover:bg-white transition-all border-2 border-orange-200"
             >
-              {/* Card Container */}
-              <div className="relative overflow-hidden rounded-2xl lg:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 transform-gpu">
-                {/* Image Container */}
-                <div className="relative aspect-[4/5] overflow-hidden bg-gray-200">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                  
-                  {/* Gradient Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-60 group-hover:opacity-80 transition-opacity duration-500`} />
-                  
-                  {/* Shine Effect on Hover */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:translate-x-full transition-transform duration-1000" />
+              <ChevronLeft className="w-6 h-6 text-orange-600" />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => scrollCarousel('right')}
+              className="pointer-events-auto p-4 bg-white/90 backdrop-blur-md rounded-full shadow-xl hover:bg-white transition-all border-2 border-orange-200"
+            >
+              <ChevronRight className="w-6 h-6 text-orange-600" />
+            </motion.button>
+          </div>
+
+          {/* Scrollable Carousel */}
+          <div
+            ref={carouselRef}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth py-8 cursor-grab active:cursor-grabbing"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
+            {/* Original Categories */}
+            {categories.map((category, index) => (
+              <motion.a
+                key={category.id}
+                href={category.link}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ 
+                  y: -12,
+                  rotateX: 5,
+                  rotateY: index % 2 === 0 ? -5 : 5,
+                  transition: { duration: 0.3 }
+                }}
+                className="group relative block perspective-1000 flex-shrink-0 w-[280px]"
+              >
+                {/* Card Container */}
+                <div className="relative overflow-hidden rounded-2xl lg:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 transform-gpu">
+                  {/* Image Container */}
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-200">
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    
+                    {/* Gradient Overlay */}
+                    <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-60 group-hover:opacity-80 transition-opacity duration-500`} />
+                    
+                    {/* Shine Effect on Hover */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:translate-x-full transition-transform duration-1000" />
+                    </div>
                   </div>
+
+                  {/* Content Overlay */}
+                  <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
+                    {/* Floating Badge */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.2 + index * 0.1 }}
+                      className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-lg"
+                    >
+                      <span className="text-xs font-bold text-gray-900">{category.count}</span>
+                    </motion.div>
+
+                    {/* Category Name */}
+                    <div className="transform transition-all duration-300 group-hover:translate-y-0 translate-y-2">
+                      <h3 className="text-2xl md:text-3xl font-black text-white mb-2 drop-shadow-lg">
+                        {category.name}
+                      </h3>
+                      
+                      {/* Shop Now Button */}
+                      <div className="flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-0 -translate-x-4">
+                        <span className="text-sm font-semibold">Shop Now</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Border Glow Effect */}
+                  <div className="absolute inset-0 rounded-2xl lg:rounded-3xl border-2 border-transparent group-hover:border-white/50 transition-all duration-500" />
                 </div>
 
-                {/* Content Overlay */}
-                <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
-                  {/* Floating Badge */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.2 + index * 0.1 }}
-                    className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-lg"
-                  >
-                    <span className="text-xs font-bold text-gray-900">{category.count}</span>
-                  </motion.div>
+                {/* 3D Shadow Effect */}
+                <div className="absolute inset-0 -z-10 bg-gradient-to-br from-gray-900/20 to-transparent rounded-2xl lg:rounded-3xl transform translate-y-2 group-hover:translate-y-4 transition-transform duration-300 blur-xl" />
+              </motion.a>
+            ))}
 
-                  {/* Category Name */}
-                  <div className="transform transition-all duration-300 group-hover:translate-y-0 translate-y-2">
-                    <h3 className="text-2xl md:text-3xl font-black text-white mb-2 drop-shadow-lg">
-                      {category.name}
-                    </h3>
-                    
-                    {/* Shop Now Button */}
-                    <div className="flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-0 -translate-x-4">
-                      <span className="text-sm font-semibold">Shop Now</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            {/* Duplicate for infinite effect */}
+            {categories.map((category) => (
+              <motion.a
+                key={`duplicate-${category.id}`}
+                href={category.link}
+                whileHover={{ 
+                  y: -12,
+                  transition: { duration: 0.3 }
+                }}
+                className="group relative block perspective-1000 flex-shrink-0 w-[280px]"
+              >
+                <div className="relative overflow-hidden rounded-2xl lg:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 transform-gpu">
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-200">
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-60 group-hover:opacity-80 transition-opacity duration-500`} />
+                  </div>
+
+                  <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-lg">
+                      <span className="text-xs font-bold text-gray-900">{category.count}</span>
+                    </div>
+
+                    <div className="transform transition-all duration-300 group-hover:translate-y-0 translate-y-2">
+                      <h3 className="text-2xl md:text-3xl font-black text-white mb-2 drop-shadow-lg">
+                        {category.name}
+                      </h3>
+                      
+                      <div className="flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <span className="text-sm font-semibold">Shop Now</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
                     </div>
                   </div>
                 </div>
+              </motion.a>
+            ))}
+          </div>
 
-                {/* Border Glow Effect */}
-                <div className="absolute inset-0 rounded-2xl lg:rounded-3xl border-2 border-transparent group-hover:border-white/50 transition-all duration-500" />
-              </div>
-
-              {/* 3D Shadow Effect */}
-              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-gray-900/20 to-transparent rounded-2xl lg:rounded-3xl transform translate-y-2 group-hover:translate-y-4 transition-transform duration-300 blur-xl" />
-            </motion.a>
-          ))}
-        </motion.div>
+          {/* Scroll Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {categories.map((_, index) => (
+              <motion.div
+                key={index}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex % categories.length ? 'w-8 bg-orange-600' : 'w-2 bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
 
         {/* View All Button */}
         <motion.div
@@ -250,6 +347,14 @@ const CategoryGrid = () => {
         .transform-gpu {
           transform: translateZ(0);
           backface-visibility: hidden;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </section>

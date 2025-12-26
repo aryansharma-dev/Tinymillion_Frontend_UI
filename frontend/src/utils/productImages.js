@@ -21,7 +21,7 @@ const optimiseCloudinaryUrl = (rawUrl, width = DEFAULT_WIDTH) => {
     const widthTransform = `w_${width}`;
     const requiredTransforms = ['f_auto', 'q_auto', 'c_fill', widthTransform];
 
-  if (!segments.length) {
+    if (!segments.length) {
       parsed.pathname = `${prefixPath}/upload/${requiredTransforms.join(',')}`;
       return parsed.toString();
     }

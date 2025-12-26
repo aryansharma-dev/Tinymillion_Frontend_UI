@@ -7,6 +7,7 @@ import CategoryGrid from '../components/CategoryGrid'
 import FeaturedMiniStores from '../components/FeaturedMiniStores'
 import usePageMetadata from '../hooks/usePageMetadata'
 import FlashSale from '../components/FlashSale'
+import BrandAndArrivalsSection from '../components/BrandAndArrivalsSection'
 import { motion } from 'framer-motion'
 import { TrendingUp, Shield, Truck, RotateCcw, Headphones, Award } from 'lucide-react'
 
@@ -75,6 +76,9 @@ const Home = () => {
       <section className="container mx-auto px-4 py-16">
         <LatestCollection />
       </section>
+
+      {/* Brand Logo Slider & New Arrivals Banner */}
+      <BrandAndArrivalsSection />
 
       {/* Flash Sale */}
       <FlashSale />

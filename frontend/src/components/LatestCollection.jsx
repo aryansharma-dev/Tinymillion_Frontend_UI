@@ -1,29 +1,39 @@
-import { useContext, useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import ShopContext from '../context/ShopContextInstance';
-import ProductItem from './ProductItem';
-import { getProductImageArray } from '../utils/productImages';
-import { ArrowRight, Sparkles, TrendingUp, Star } from 'lucide-react';
+import { useContext, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import ShopContext from "../context/ShopContextInstance";
+import { ArrowRight } from "lucide-react";
+
+const FLOAT_VARIANT = {
+  animate: {
+    y: [0, -16, 0],
+    transition: {
+      duration: 4,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  },
+};
 
 const LatestCollection = () => {
-  const { products, productPagination, loadNextProductsPage } = useContext(ShopContext);
+  const { products, productPagination, loadNextProductsPage } =
+    useContext(ShopContext);
   const [latestProducts, setLatestProducts] = useState([]);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
 
-  // Parallax effect for the image
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.2, 1, 1.1]);
+  // Content
+  const storyContent = {
+    badge: "New Arrivals 2025",
+    title: "Latest Collection",
+    description:
+      "Discover the season’s must-have pieces and individual style. The newest arrivals blend minimalism and comfort in every detail.",
+    lifestyleImage:
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=1600&fit=crop",
+    accentImage:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=700&h=900&fit=crop",
+  };
 
   useEffect(() => {
     const latest = products.slice(0, 10);
     setLatestProducts(latest);
-    setFeaturedProducts(latest.slice(0, 3)); // First 3 products as featured
   }, [products]);
 
   useEffect(() => {
@@ -32,222 +42,102 @@ const LatestCollection = () => {
     loadNextProductsPage();
   }, [products.length, productPagination?.hasMore, loadNextProductsPage]);
 
-  const storyContent = {
-    badge: "New Arrivals 2025",
-    title: "Latest Collections",
-    subtitle: "Where Fashion Meets Individuality",
-    description: "Discover the newest styles and trends curated by TinyMillion. Each piece tells a story of creativity, comfort, and confidence. From street-style essentials to premium classics, our latest collection brings you the best of contemporary fashion.",
-    features: [
-      { icon: <Sparkles className="w-5 h-5" />, text: "Hand-picked by Style Experts" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Trending This Season" },
-      { icon: <Star className="w-5 h-5" />, text: "Premium Quality Fabrics" }
-    ],
-    lifestyleImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=1600&fit=crop"
-  };
-
   return (
-    <div className="relative overflow-hidden">
-      {/* Storytelling Section - Full Width Split */}
-      <section ref={containerRef} className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50">
-        <div className="grid lg:grid-cols-2 gap-0">
-          
-          {/* Left Side - Parallax Lifestyle Image */}
-          <motion.div 
-            className="relative overflow-hidden bg-gray-900 h-[50vh] lg:h-screen lg:sticky lg:top-0"
-            initial={{ opacity: 0, x: -100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            {/* Parallax Container */}
-            <motion.div
-              style={{ y: imageY, scale: imageScale }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <img
-                src={storyContent.lifestyleImage}
-                alt="Latest Collection Lifestyle"
-                className="w-full h-full object-cover"
-              />
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-            </motion.div>
-
-            {/* Floating Stats on Image */}
-            <div className="absolute bottom-8 left-8 right-8 z-10">
+    <>
+      <section
+        className="relative bg-white"
+        aria-labelledby="latest-collection-heading"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-20 lg:py-36">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-16 gap-x-16 items-center">
+            {/* LEFT: Small Image + Content */}
+            <div className="relative flex flex-col items-start max-w-lg w-full mx-auto lg:mx-0">
+              {/* Floating small image overlaps large image (on right, via negative margin) */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-                className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20"
+                variants={FLOAT_VARIANT}
+                animate="animate"
+                className="z-10 absolute left-0 -top-10 sm:-top-12 lg:static lg:mb-10 shadow-xl rounded-xl bg-neutral-100 overflow-hidden border border-neutral-200"
+                style={{
+                  width: "7.2rem",
+                  height: "9.2rem",
+                  boxShadow: "0 8px 26px 0 rgb(30 32 42 / 8%)",
+                  marginBottom: "2.25rem",
+                }}
+                tabIndex={-1}
               >
-                <div className="grid grid-cols-3 gap-4 text-white text-center">
-                  <div>
-                    <p className="text-3xl font-black">50+</p>
-                    <p className="text-xs opacity-80">New Styles</p>
-                  </div>
-                  <div>
-                    <p className="text-3xl font-black">100%</p>
-                    <p className="text-xs opacity-80">Premium</p>
-                  </div>
-                  <div>
-                    <p className="text-3xl font-black">⭐4.9</p>
-                    <p className="text-xs opacity-80">Rated</p>
-                  </div>
-                </div>
+                <img
+                  src={storyContent.accentImage}
+                  alt="Editorial fashion highlight"
+                  className="w-full h-full object-cover rounded-xl"
+                  draggable={false}
+                  style={{ userSelect: "none" }}
+                />
+                <div className="absolute inset-0 border border-white/70 rounded-xl pointer-events-none" />
               </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Right Side - Collection Story + Products */}
-          <div className="relative flex items-center py-12 lg:py-16 min-h-screen lg:min-h-0">
-            <div className="w-full px-6 sm:px-12 lg:px-16 xl:px-20 space-y-8">
-              
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 rounded-full text-sm font-semibold text-orange-900">
-                  <Sparkles className="w-4 h-4" />
+              {/* Shift content down to match float and allow room for overlap */}
+              <div className="pt-20 lg:pt-6">
+                {/* Category Badge */}
+                <span className="block mb-4 text-[0.82rem] select-none uppercase tracking-wide text-neutral-400 font-medium">
                   {storyContent.badge}
                 </span>
-              </motion.div>
-
-              {/* Title with Text Reveal */}
-              <div className="space-y-3">
-                <motion.h2
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900"
+                {/* Heading */}
+                <h2
+                  id="latest-collection-heading"
+                  className="font-serif text-gray-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight"
+                  style={{
+                    letterSpacing: "-.02em",
+                    lineHeight: "1.08",
+                  }}
                 >
-                  {storyContent.title.split(' ').map((word, index) => (
-                    <motion.span
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                      className="inline-block mr-3"
-                    >
-                      {word}
-                    </motion.span>
-                  ))}
-                </motion.h2>
-
-                <motion.h3
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  className="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent"
-                >
-                  {storyContent.subtitle}
-                </motion.h3>
-              </div>
-
-              {/* Description */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="text-gray-600 text-base sm:text-lg leading-relaxed"
-              >
-                {storyContent.description}
-              </motion.p>
-
-              {/* Features */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="space-y-3"
-              >
-                {storyContent.features.map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
-                    className="flex items-center gap-3 text-gray-700"
-                  >
-                    <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
-                      {feature.icon}
-                    </div>
-                    <span className="font-medium">{feature.text}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* 3 Key Featured Products */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-                className="pt-6"
-              >
-                <h4 className="text-lg font-bold text-gray-900 mb-4">Featured This Week</h4>
-                <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                  {featuredProducts.map((item, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.9 + index * 0.1 }}
-                      whileHover={{ scale: 1.05 }}
-                      className="group"
-                    >
-                      <a href={`/product/${item._id}`} className="block">
-                        <div className="relative overflow-hidden rounded-xl bg-gray-100 aspect-square mb-2">
-                          <img
-                            src={getProductImageArray(item)[0]}
-                            alt={item.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                        </div>
-                        <h5 className="text-xs sm:text-sm font-semibold text-gray-900 line-clamp-1 mb-1">
-                          {item.name}
-                        </h5>
-                        <p className="text-sm sm:text-base font-bold text-orange-600">
-                          ₹{item.price}
-                        </p>
-                      </a>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* CTA Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 1.2 }}
-              >
+                  {storyContent.title}
+                </h2>
+                {/* Decorative Divider/Underline */}
+                <div className="h-[2px] w-14 bg-gradient-to-r from-transparent via-neutral-400/60 to-transparent rounded-full my-5" />
+                {/* Description */}
+                <p className="text-base sm:text-lg text-neutral-500 font-normal mb-7 leading-relaxed">
+                  {storyContent.description}
+                </p>
+                {/* CTA Button */}
                 <a
                   href="/collection"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-full font-bold text-lg hover:from-orange-700 hover:to-red-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 group"
+                  className="inline-flex items-center gap-3 px-7 py-3 rounded-md bg-gray-900 text-white font-semibold text-base shadow-sm border border-gray-900 group transition
+                  hover:shadow-lg hover:-translate-y-0.5 active:shadow active:scale-98 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-800/10"
+                  style={{ WebkitTapHighlightColor: "transparent", minHeight: "3.25rem" }}
                 >
-                  Explore Full Collection
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <span>Discover the Collection</span>
+                  <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" />
                 </a>
-              </motion.div>
+              </div>
             </div>
+            {/* RIGHT: Large Static Image (slightly overlapped by small left image using negative margin on lg+) */}
+            <div className="relative flex justify-center items-center min-h-[28rem] lg:min-h-[36rem]">
+              <div
+                className="relative rounded-3xl overflow-hidden shadow-2xl bg-neutral-100 border border-neutral-200"
+                style={{
+                  height: "32rem",
+                  width: "21rem",
+                }}
+              >
+                <img
+                  src={storyContent.lifestyleImage}
+                  alt="Model in latest editorial collection"
+                  className="w-full h-full object-cover rounded-3xl"
+                  draggable={false}
+                  style={{ userSelect: "none" }}
+                />
+                <div className="absolute inset-0 border border-neutral-200/70 rounded-3xl pointer-events-none" />
+                {/* Small image overlap for LG screens (empty absolutely positioned block to create overlap/buffer) */}
+                <div className="hidden lg:block absolute -left-14 top-10 w-14 h-40 bg-transparent" />
+              </div>
+            </div>
+          </div>
+          {/* Section Underline/Accent Divider (like Most Purchased) */}
+          <div className="w-full flex justify-start mt-12 select-none">
+            <div className="h-[2px] w-[120px] sm:w-[190px] rounded-full bg-gradient-to-r from-transparent via-neutral-300/70 to-transparent" />
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

@@ -137,37 +137,7 @@ const Footer = () => {
           </div>
 
           {/* Column 4: Newsletter & Contact */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Stay Updated!</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Subscribe to get special offers, free giveaways, and exclusive deals.
-            </p>
-            
-            {/* Newsletter Component */}
-            <div className="mb-6">
-              <NewsletterBox />
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-3">
-              <a 
-                href="https://wa.me/919258808835" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-600 text-sm hover:text-primary transition-colors"
-              >
-                <Phone size={16} />
-                <span>+91-925-8808-835</span>
-              </a>
-              <a 
-                href="mailto:help.tinymillion@gmail.com"
-                className="flex items-center gap-2 text-gray-600 text-sm hover:text-primary transition-colors"
-              >
-                <Mail size={16} />
-                <span>help.tinymillion@gmail.com</span>
-              </a>
-            </div>
-          </div>
+          
         </div>
 
         {/* Mobile Layout - Accordion Style */}

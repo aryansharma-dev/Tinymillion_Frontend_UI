@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { useParams, Link, useLocation } from "react-router-dom";
 import ShopContext from '../context/ShopContextInstance';
 import { getPrimaryProductImage } from "../utils/productImages";
-import Title from "../components/Title";
 import usePageMetadata from "../hooks/usePageMetadata";
 import MiniStoreDetailSkeleton from "../components/skeletons/MiniStoreDetailSkeleton";
 import MiniStoreListSkeleton from "../components/skeletons/MiniStoreListSkeleton";
+import { ArrowLeft, ShoppingBag, Users, TrendingUp, Star, Heart, Share2, ChevronRight } from 'lucide-react';
 
 const RESERVED = new Set([
   "", "home", "about", "contact", "collection", "collections", "cart", "checkout",
@@ -131,12 +131,10 @@ export default function MiniStore({ limit = 8 }) {
 
   usePageMetadata(meta);
 
-  // Individual store by slug
   useEffect(() => {
-     const normalisedSlug = typeof slug === "string" ? slug.trim().toLowerCase() : "";
+    const normalisedSlug = typeof slug === "string" ? slug.trim().toLowerCase() : "";
 
     if (!normalisedSlug) {
-      // On the main /store page we don't need individual store data
       setErr("");
       setStore(null);
       setLoading(false);
@@ -156,7 +154,7 @@ export default function MiniStore({ limit = 8 }) {
       preloadedStore?.customUrl?.toLowerCase?.() === normalisedSlug;
 
     setErr("");
-     if (prefetchedMatches) {
+    if (prefetchedMatches) {
       setStore(preloadedStore);
       setLoading(false);
     } else {
@@ -166,7 +164,6 @@ export default function MiniStore({ limit = 8 }) {
 
     (async () => {
       try {
-         // Namespace slug fetch to avoid admin route shadowing in Express.
         const { data } = await api.get(`/api/ministores/store/${normalisedSlug}`, {
           params: { productLimit: 24 },
         })
@@ -189,11 +186,9 @@ export default function MiniStore({ limit = 8 }) {
     return () => {
       cancelled = true;
     };
-   }, [slug, api, preloadedStore]);
+  }, [slug, api, preloadedStore]);
 
-  // Ministores list fetch
   useEffect(() => {
-    // Only fetch list when no slug (showing main mini stores page)
     if (slug) return;
 
     let cancelled = false;
@@ -218,7 +213,7 @@ export default function MiniStore({ limit = 8 }) {
     };
   }, [limit, api, slug]);
 
-  // CONDITIONAL RENDERING: Show individual store details if slug exists
+  // Individual Store Detail View
   if (slug) {
     if (loading && !store) {
       return <MiniStoreDetailSkeleton />;
@@ -226,11 +221,17 @@ export default function MiniStore({ limit = 8 }) {
 
     if (err === "notfound") {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Store Not Found</h2>
-            <p className="text-gray-600 mb-4">The store you&rsquo;re looking for doesn&rsquo;t exist.</p>
-            <Link to="/store" className="text-blue-600 hover:underline">← Back to Mini Stores</Link>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="text-center px-4">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-4">
+              <ShoppingBag className="w-10 h-10 text-red-600" />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Store Not Found</h2>
+            <p className="text-gray-600 mb-6">The store you're looking for doesn't exist or has been removed.</p>
+            <Link to="/store" className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Mini Stores
+            </Link>
           </div>
         </div>
       );
@@ -238,109 +239,205 @@ export default function MiniStore({ limit = 8 }) {
 
     if (err) {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-red-600 mb-2">Error Loading Store</h2>
-            <p className="text-gray-600 mb-4">Something went wrong. Please try again.</p>
-            <Link to="/store" className="text-blue-600 hover:underline">← Back to Mini Stores</Link>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="text-center px-4">
+            <h2 className="text-3xl font-bold text-red-600 mb-2">Error Loading Store</h2>
+            <p className="text-gray-600 mb-6">Something went wrong. Please try again later.</p>
+            <Link to="/store" className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Mini Stores
+            </Link>
           </div>
         </div>
       );
     }
 
-    // Individual Store Detail View
     return (
-      <div className="min-h-screen bg-gray-50">
-        {/* Back Button */}
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <Link to="/store" className="inline-flex items-center text-gray-600 hover:text-gray-900 transition">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Mini Stores
-          </Link>
-        </div>
-
-        {/* Store Banner */}
-        {store?.bannerUrl && (
-          <div className="w-full h-48 md:h-64 bg-gray-200">
+      <div className="min-h-screen bg-white">
+        {/* Store Cover Banner */}
+        <div className="relative h-64 md:h-80 lg:h-96 bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 overflow-hidden">
+          {store?.bannerUrl ? (
             <img
               src={store.bannerUrl}
               alt={store.displayName}
-              loading="lazy"
-              decoding="async"
               className="w-full h-full object-cover"
+              loading="lazy"
             />
-          </div>
-        )}
-
-        {/* Store Header */}
-        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
-          <div className="flex items-center gap-4 md:gap-6">
-            {store?.avatarUrl && (
-              <img
-                className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-4 border-white shadow-lg"
-                src={store.avatarUrl}
-                alt={store.displayName}
-                loading="lazy"
-                decoding="async"
-              />
-            )}
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{store?.displayName}</h1>
-              {store?.bio && (
-                <p className="text-sm md:text-base text-gray-600 mt-1">{store.bio}</p>
-              )}
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-2" />
+                <p className="text-gray-400 text-sm">Store Banner</p>
+              </div>
             </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          
+          {/* Back Button */}
+          <Link 
+            to="/store" 
+            className="absolute top-6 left-6 inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm text-gray-900 font-medium rounded-lg hover:bg-white transition shadow-lg"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Link>
+
+          {/* Share & Like Buttons */}
+          <div className="absolute top-6 right-6 flex gap-2">
+            <button className="p-3 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-white transition shadow-lg">
+              <Heart className="w-5 h-5 text-gray-700" />
+            </button>
+            <button className="p-3 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-white transition shadow-lg">
+              <Share2 className="w-5 h-5 text-gray-700" />
+            </button>
           </div>
         </div>
 
-        {/* Products Section */}
-        <div className="max-w-7xl mx-auto px-4 pb-12">
-          <h2 className="text-xl font-semibold mb-6 text-gray-800">Products</h2>
-          
-          {(!store?.products || store.products.length === 0) ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow">
-              <p className="text-gray-500">No products available in this store yet.</p>
+        {/* Store Info Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative -mt-16 md:-mt-20">
+            <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                {/* Avatar */}
+                <div className="relative">
+                  <img
+                    src={store?.avatarUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200"}
+                    alt={store?.displayName}
+                    className="w-24 h-24 md:w-32 md:h-32 rounded-2xl object-cover border-4 border-white shadow-xl"
+                    loading="lazy"
+                  />
+                  <div className="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white"></div>
+                </div>
+
+                {/* Store Details */}
+                <div className="flex-1">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                        {store?.displayName}
+                      </h1>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <Users className="w-4 h-4" />
+                          <span>2.5K followers</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                          <span>4.8 Rating</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <TrendingUp className="w-4 h-4 text-green-500" />
+                          <span>Trending</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button className="px-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition whitespace-nowrap">
+                      Follow Store
+                    </button>
+                  </div>
+                  
+                  {store?.bio && (
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      {store.bio}
+                    </p>
+                  )}
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-4 pt-4 border-t">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-gray-900">
+                        {store?.products?.length || 0}
+                      </div>
+                      <div className="text-sm text-gray-500">Products</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-gray-900">1.2K</div>
+                      <div className="text-sm text-gray-500">Sales</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-gray-900">4.9</div>
+                      <div className="text-sm text-gray-500">Reviews</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {store.products.map((p) => {
-                const image = getPrimaryProductImage(p) || "https://tinymillion.com/images/default-product.png";
-                return (
-                  <Link 
-                    key={p?._id || p?.id} 
-                    to={`/product/${p?._id || p?.id || ''}`} 
-                    className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 group"
-                  >
-                    {image ? (
-                      <div className="relative overflow-hidden">
+          </div>
+
+          {/* Products Section */}
+          <div className="py-12">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                  Featured Products
+                </h2>
+                <p className="text-gray-600">Curated collection from this creator</p>
+              </div>
+              <div className="flex gap-2">
+                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm font-medium">
+                  All
+                </button>
+                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm font-medium">
+                  New
+                </button>
+                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm font-medium">
+                  Popular
+                </button>
+              </div>
+            </div>
+
+            {(!store?.products || store.products.length === 0) ? (
+              <div className="text-center py-20 bg-gray-50 rounded-2xl">
+                <ShoppingBag className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                <p className="text-gray-500 text-lg">No products available yet</p>
+                <p className="text-gray-400 text-sm mt-2">Check back soon for new arrivals</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {store.products.map((p) => {
+                  const image = getPrimaryProductImage(p) || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500";
+                  return (
+                    <Link 
+                      key={p?._id || p?.id} 
+                      to={`/product/${p?._id || p?.id || ''}`}
+                      className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-300 hover:shadow-2xl transition-all duration-300"
+                    >
+                      <div className="relative overflow-hidden aspect-square">
                         <img
                           src={image}
                           alt={p?.name || 'Product'}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           loading="lazy"
-                          decoding="async"
-                          className="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
+                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
+                          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100">
+                            <Heart className="w-4 h-4 text-gray-700" />
+                          </button>
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition" />
                       </div>
-                    ) : (
-                      <div className="w-full h-48 md:h-56 flex items-center justify-center bg-gray-100 text-xs text-gray-400">
-                        No image
+                      <div className="p-4">
+                        <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-600 transition">
+                          {p?.name || 'Product'}
+                        </h3>
+                        <div className="flex items-center justify-between">
+                          {typeof p?.price === 'number' && !Number.isNaN(p.price) && (
+                            <span className="text-lg font-bold text-gray-900">
+                              ₹{p.price.toLocaleString()}
+                            </span>
+                          )}
+                          <div className="flex items-center gap-1 text-sm text-gray-500">
+                            <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                            <span>4.5</span>
+                          </div>
+                        </div>
                       </div>
-                    )}
-                    <div className="p-3">
-                      <div className="text-sm font-medium line-clamp-2 text-gray-800 mb-1">
-                        {p?.name || 'Product'}
-                      </div>
-                      {typeof p?.price === 'number' && !Number.isNaN(p.price) && (
-                        <div className="text-base font-bold text-gray-900">₹{p.price.toLocaleString()}</div>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -348,70 +445,144 @@ export default function MiniStore({ limit = 8 }) {
 
   // MAIN VIEW: Mini Stores List
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-10">
-          <Title text1={"CREATOR"} text2={"MINI STORES"} />
-          <p className="w-full md:w-3/4 mx-auto text-xs sm:text-sm md:text-base text-gray-600 mt-4">
-            Discover the newest styles and trends curated by TinyMillion - where fashion meets individuality.
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white py-20">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            Creator Mini Stores
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
+            Discover exclusive collections curated by top creators
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition shadow-xl">
+              Explore Stores
+            </button>
+            <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition">
+              Become a Creator
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="bg-white border-y shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-4 text-center">
+            <div>
+              <div className="text-3xl font-bold text-gray-900">{stores.length}+</div>
+              <div className="text-sm text-gray-600">Active Stores</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-gray-900">50K+</div>
+              <div className="text-sm text-gray-600">Products</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-gray-900">100K+</div>
+              <div className="text-sm text-gray-600">Happy Customers</div>
+            </div>
+            <div className="hidden md:block">
+              <div className="text-3xl font-bold text-gray-900">4.8★</div>
+              <div className="text-sm text-gray-600">Average Rating</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stores Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Featured Creators</h2>
+            <p className="text-gray-600">Shop from verified creator stores</p>
+          </div>
+          <button className="hidden md:flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium">
+            View All
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
 
         {storesLoading ? (
           <MiniStoreListSkeleton count={limit} />
         ) : stores.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
-            <p className="text-gray-500">No mini stores available yet.</p>
+          <div className="text-center py-20 bg-white rounded-2xl shadow-sm">
+            <ShoppingBag className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+            <p className="text-gray-500 text-lg">No stores available yet</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {stores.map((s) => (
-               <Link
+              <Link
                 key={s.slug}
                 to={`/${s.slug}`}
-                state={{ store: s }} 
-                className="group bg-white border rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                state={{ store: s }}
+                className="group"
               >
-                <div className="w-full h-32 md:h-40 bg-gradient-to-br from-gray-100 to-gray-200">
-                  {s.bannerUrl ? (
-                    <img
-                      src={s.bannerUrl}
-                      alt={s.displayName}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <img
-                      src="https://tinymillion.com/images/default-banner.png"
-                      alt="Default Banner"
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                </div>
-                <div className="p-3 flex items-center gap-3">
-                  <img
-                   src={s.avatarUrl || "https://tinymillion.com/images/default-avatar.png"}
-                    alt={s.displayName}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="font-medium truncate text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {s.displayName}
-                    </div>
-                    {s.bio && (
-                      <div className="text-xs text-gray-500 line-clamp-1">{s.bio}</div>
+                <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-300 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                  {/* Banner */}
+                  <div className="relative h-32 bg-gradient-to-br from-purple-100 to-blue-100 overflow-hidden">
+                    {s.bannerUrl ? (
+                      <img
+                        src={s.bannerUrl}
+                        alt={s.displayName}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <ShoppingBag className="w-12 h-12 text-gray-300" />
+                      </div>
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  </div>
+
+                  {/* Profile & Info */}
+                  <div className="p-4 -mt-8 relative">
+                    <img
+                      src={s.avatarUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200"}
+                      alt={s.displayName}
+                      className="w-16 h-16 rounded-xl object-cover border-4 border-white shadow-lg mb-3"
+                      loading="lazy"
+                    />
+                    <h3 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-blue-600 transition truncate">
+                      {s.displayName}
+                    </h3>
+                    {s.bio && (
+                      <p className="text-sm text-gray-500 line-clamp-2 mb-3">{s.bio}</p>
+                    )}
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <ShoppingBag className="w-3 h-3" />
+                        <span>24 Products</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                        <span>4.8</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
         )}
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-20">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to Start Your Store?
+          </h2>
+          <p className="text-xl mb-8 opacity-90">
+            Join thousands of creators earning through their curated collections
+          </p>
+          <button className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition shadow-xl">
+            Create Your Store Now
+          </button>
+        </div>
       </div>
     </div>
   );

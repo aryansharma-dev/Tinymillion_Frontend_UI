@@ -426,36 +426,9 @@ const Navbar = () => {
                             }
                         >
                             <span className='text-2xl'>👔</span>
-                            <span>MEN</span>
+                            <span>COLLECTION</span>
                         </NavLink>
 
-                        <NavLink
-                            to='/collection'
-                            onClick={() => setVisible(false)}
-                            className={({ isActive }) =>
-                                `flex items-center gap-4 px-6 py-4 text-sm font-bold tracking-wide transition-all duration-300 ${isActive 
-                                    ? 'text-gray-900 bg-gradient-to-r from-pink-50 to-transparent border-l-4 border-pink-600' 
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                                }`
-                            }
-                        >
-                            <span className='text-2xl'>👗</span>
-                            <span>WOMEN</span>
-                        </NavLink>
-
-                        <NavLink
-                            to='/collection'
-                            onClick={() => setVisible(false)}
-                            className={({ isActive }) =>
-                                `flex items-center gap-4 px-6 py-4 text-sm font-bold tracking-wide transition-all duration-300 ${isActive 
-                                    ? 'text-gray-900 bg-gradient-to-r from-purple-50 to-transparent border-l-4 border-purple-600' 
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                                }`
-                            }
-                        >
-                            <span className='text-2xl'>💼</span>
-                            <span>ACCESSORIES</span>
-                        </NavLink>
 
                         <NavLink
                             to='/store'
@@ -482,7 +455,21 @@ const Navbar = () => {
                             }
                         >
                             <span className='text-2xl'>🔥</span>
-                            <span>OFFERS</span>
+                            <span>ABOUT US</span>
+                        </NavLink>
+
+                        <NavLink
+                            to='/contact'
+                            onClick={() => setVisible(false)}
+                            className={({ isActive }) =>
+                                `flex items-center gap-4 px-6 py-4 text-sm font-bold tracking-wide transition-all duration-300 ${isActive 
+                                    ? 'text-gray-900 bg-gradient-to-r from-orange-50 to-transparent border-l-4 border-orange-600' 
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                }`
+                            }
+                        >
+                            <span className='text-2xl'>🔥</span>
+                            <span>CONTACT US</span>
                         </NavLink>
 
                         <div className='my-4 px-6'>

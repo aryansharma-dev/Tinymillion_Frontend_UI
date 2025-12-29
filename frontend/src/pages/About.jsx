@@ -25,17 +25,6 @@ const About = () => {
 
   return (
     <div className="bg-white">
-      {/* Breadcrumb */}
-      <div className="bg-gray-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <a href="/" className="hover:text-gray-900">Home</a>
-            <span>/</span>
-            <span className="text-gray-900">About us</span>
-          </div>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

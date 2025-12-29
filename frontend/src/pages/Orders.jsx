@@ -1,9 +1,9 @@
 import {useContext, useEffect, useState, useMemo, useCallback} from 'react';
 import ShopContext from '../context/ShopContextInstance';
-import Title from '../components/Title';
 import api from '../lib/api';
 import usePageMetadata from '../hooks/usePageMetadata';
 import { getPrimaryProductImage } from '../utils/productImages';
+import { Package, Clock, CheckCircle, XCircle, Truck, RefreshCw } from 'lucide-react';
 
 const Orders = () => {
   const { token, currency, ensureProductLoaded, productMap } = useContext(ShopContext);
@@ -12,7 +12,7 @@ const Orders = () => {
 
   const loadOrderData = useCallback(async () => {
     try {
-       if (!token) return;
+      if (!token) return;
 
       const { data } = await api.post('/api/order/userorders');
       if (data.success) {
@@ -35,7 +35,7 @@ const Orders = () => {
     }
   }, [token]);
 
- useEffect(() => {
+  useEffect(() => {
     loadOrderData();
   }, [loadOrderData]);
   
@@ -137,59 +137,155 @@ const Orders = () => {
     robots: 'noindex, nofollow',
     structuredData: ordersStructuredData,
   });
+
+  const getStatusIcon = (status) => {
+    const statusLower = (status || '').toLowerCase();
+    if (statusLower.includes('delivered')) return <CheckCircle className="w-5 h-5 text-green-500" />;
+    if (statusLower.includes('shipped') || statusLower.includes('transit')) return <Truck className="w-5 h-5 text-blue-500" />;
+    if (statusLower.includes('cancelled') || statusLower.includes('failed')) return <XCircle className="w-5 h-5 text-red-500" />;
+    if (statusLower.includes('processing')) return <Clock className="w-5 h-5 text-yellow-500" />;
+    return <Package className="w-5 h-5 text-gray-500" />;
+  };
+
+  const getStatusColor = (status) => {
+    const statusLower = (status || '').toLowerCase();
+    if (statusLower.includes('delivered')) return 'bg-green-100 text-green-700 border-green-200';
+    if (statusLower.includes('shipped') || statusLower.includes('transit')) return 'bg-blue-100 text-blue-700 border-blue-200';
+    if (statusLower.includes('cancelled') || statusLower.includes('failed')) return 'bg-red-100 text-red-700 border-red-200';
+    if (statusLower.includes('processing')) return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+    return 'bg-gray-100 text-gray-700 border-gray-200';
+  };
   
   return (
-    <div className='border-t pt-16'>
-      <div className='text-2xl'>
-        <Title text1={'MY'} text2={'ORDERS'} />
-      </div>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Orders</h1>
+          <p className="text-gray-600">Track and manage your orders</p>
+        </div>
 
-          <div>
+        {/* Empty State */}
+        {orderData.length === 0 ? (
+          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+            <Package className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No orders yet</h3>
+            <p className="text-gray-500 mb-6">Start shopping to see your orders here</p>
+            <button
+              onClick={() => window.location.href = '/collection'}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition"
+            >
+              Start Shopping
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
             {orderData.map((item, index) => {
               const pid = String(item.product || item.productId || item._id || index);
               const storedImage = typeof item.image === 'string' && item.image.trim();
               const fallbackImage = resolvedImages[pid] || getPrimaryProductImage(productMap.get(pid));
               const imageSrc = storedImage || fallbackImage || null;
+
               return (
                 <div
                   key={`${item._id || index}-${index}`}
-                  className='py-4 border-t border-b text-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4'
+                  className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition"
                 >
-                  <div className='flex items-start gap-6 text-sm'>
-                    {imageSrc ? (
-                      <img
-                        className='w-16 sm:w-20 object-cover'
-                        src={imageSrc}
-                        alt={item.name || 'Ordered product'}
-                        loading='lazy'
-                        decoding='async'
-                      />
-                    ) : (
-                      <div className='w-16 sm:w-20 bg-gray-100 flex items-center justify-center text-xs'>
-                        No image
+                  <div className="flex flex-col lg:flex-row gap-6">
+                    {/* Product Image & Details */}
+                    <div className="flex gap-4 flex-1">
+                      {imageSrc ? (
+                        <img
+                          className="w-24 h-24 object-cover rounded-lg border border-gray-200"
+                          src={imageSrc}
+                          alt={item.name || 'Ordered product'}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400">
+                          No image
+                        </div>
+                      )}
+                      
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                          {item.name}
+                        </h3>
+                        
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                          <div>
+                            <span className="text-gray-500">Price:</span>
+                            <span className="ml-2 font-semibold text-gray-900">
+                              {currency}{item.price}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-gray-500">Quantity:</span>
+                            <span className="ml-2 font-semibold text-gray-900">
+                              {item.quantity}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-gray-500">Size:</span>
+                            <span className="ml-2 font-semibold text-gray-900">
+                              {item.size}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-gray-500">Payment:</span>
+                            <span className="ml-2 font-semibold text-gray-900 uppercase">
+                              {item.paymentMethod}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+                          <Clock className="w-4 h-4" />
+                          <span>Ordered on {new Date(item.date).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                          })}</span>
+                        </div>
                       </div>
-                    )}
-                    <div>
-                      <p className='sm:text-base font-medium'>{item.name}</p>
-                      <div className='flex items-center gap-3 mt-1 text-base text-gray-700'>
-                        <p>{currency}{item.price}</p>
-                        <p>Quantity: {item.quantity}</p>
-                                 <p>Size: {item.size}</p>
+                    </div>
+
+                    {/* Status & Actions */}
+                    <div className="flex flex-col gap-4 lg:w-64">
+                      {/* Status Badge */}
+                      <div className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border ${getStatusColor(item.status)}`}>
+                        {getStatusIcon(item.status)}
+                        <span className="font-semibold text-sm">
+                          {item.status}
+                        </span>
                       </div>
-                      <p className='mt-1'>Date: <span className=' text-gray-400'>{new Date(item.date).toDateString()}</span></p>
-                      <p className='mt-1'>Payment: <span className=' text-gray-400'>{item.paymentMethod}</span></p>
+
+                      {/* Track Order Button */}
+                      <button
+                        onClick={loadOrderData}
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium text-sm"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Track Order
+                      </button>
+
+                      {/* Order Total */}
+                      <div className="pt-3 border-t">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-500">Order Total:</span>
+                          <span className="text-lg font-bold text-gray-900">
+                            {currency}{(item.price * item.quantity).toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className='md:w-1/2 flex justify-between'>
-                    <div className='flex items-center gap-2'>
-                      <p className='min-w-2 h-2 rounded-full bg-green-500'></p>
-                      <p className='text-sm md:text-base'>{item.status}</p>
-                    </div>
-                    <button onClick={loadOrderData} className='border px-4 py-2 text-sm font-medium rounded-sm'>Track Order</button>
                   </div>
                 </div>
-               );
+              );
             })}
+          </div>
+        )}
       </div>
     </div>
   );

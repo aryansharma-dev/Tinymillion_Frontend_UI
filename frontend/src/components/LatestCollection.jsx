@@ -1,7 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import ShopContext from "../context/ShopContextInstance";
 import { ArrowRight } from "lucide-react";
+
+// Mock context for demo
+const ShopContext = {
+  products: [],
+  productPagination: { hasMore: false },
+  loadNextProductsPage: () => {},
+};
 
 const FLOAT_VARIANT = {
   animate: {
@@ -15,16 +21,14 @@ const FLOAT_VARIANT = {
 };
 
 const LatestCollection = () => {
-  const { products, productPagination, loadNextProductsPage } =
-    useContext(ShopContext);
+  const { products, productPagination, loadNextProductsPage } = ShopContext;
   const [latestProducts, setLatestProducts] = useState([]);
 
-  // Content
   const storyContent = {
     badge: "New Arrivals 2025",
     title: "Latest Collection",
     description:
-      "Discover the season’s must-have pieces and individual style. The newest arrivals blend minimalism and comfort in every detail.",
+      "Discover the season's must-have pieces and individual style. The newest arrivals blend minimalism and comfort in every detail.",
     lifestyleImage:
       "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=1600&fit=crop",
     accentImage:
@@ -43,101 +47,102 @@ const LatestCollection = () => {
   }, [products.length, productPagination?.hasMore, loadNextProductsPage]);
 
   return (
-    <>
-      <section
-        className="relative bg-white"
-        aria-labelledby="latest-collection-heading"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-20 lg:py-36">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-16 gap-x-16 items-center">
-            {/* LEFT: Small Image + Content */}
-            <div className="relative flex flex-col items-start max-w-lg w-full mx-auto lg:mx-0">
-              {/* Floating small image overlaps large image (on right, via negative margin) */}
-              <motion.div
-                variants={FLOAT_VARIANT}
-                animate="animate"
-                className="z-10 absolute left-0 -top-10 sm:-top-12 lg:static lg:mb-10 shadow-xl rounded-xl bg-neutral-100 overflow-hidden border border-neutral-200"
-                style={{
-                  width: "7.2rem",
-                  height: "9.2rem",
-                  boxShadow: "0 8px 26px 0 rgb(30 32 42 / 8%)",
-                  marginBottom: "2.25rem",
-                }}
-                tabIndex={-1}
+    <section
+      className="relative bg-white overflow-hidden"
+      aria-labelledby="latest-collection-heading"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          
+          {/* LEFT SIDE: Content */}
+          <div className="relative order-2 lg:order-1 z-10">
+            <div className="max-w-xl lg:pr-8">
+              {/* Badge */}
+              <span className="inline-block mb-3 text-xs uppercase tracking-widest text-neutral-500 font-semibold">
+                {storyContent.badge}
+              </span>
+
+              {/* Title */}
+              <h2
+                id="latest-collection-heading"
+                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-none tracking-tight"
+                style={{ fontFamily: 'Georgia, serif' }}
               >
-                <img
-                  src={storyContent.accentImage}
-                  alt="Editorial fashion highlight"
-                  className="w-full h-full object-cover rounded-xl"
-                  draggable={false}
-                  style={{ userSelect: "none" }}
-                />
-                <div className="absolute inset-0 border border-white/70 rounded-xl pointer-events-none" />
-              </motion.div>
-              {/* Shift content down to match float and allow room for overlap */}
-              <div className="pt-20 lg:pt-6">
-                {/* Category Badge */}
-                <span className="block mb-4 text-[0.82rem] select-none uppercase tracking-wide text-neutral-400 font-medium">
-                  {storyContent.badge}
-                </span>
-                {/* Heading */}
-                <h2
-                  id="latest-collection-heading"
-                  className="font-serif text-gray-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight"
-                  style={{
-                    letterSpacing: "-.02em",
-                    lineHeight: "1.08",
-                  }}
-                >
-                  {storyContent.title}
-                </h2>
-                {/* Decorative Divider/Underline */}
-                <div className="h-[2px] w-14 bg-gradient-to-r from-transparent via-neutral-400/60 to-transparent rounded-full my-5" />
-                {/* Description */}
-                <p className="text-base sm:text-lg text-neutral-500 font-normal mb-7 leading-relaxed">
-                  {storyContent.description}
-                </p>
-                {/* CTA Button */}
-                <a
-                  href="/collection"
-                  className="inline-flex items-center gap-3 px-7 py-3 rounded-md bg-gray-900 text-white font-semibold text-base shadow-sm border border-gray-900 group transition
-                  hover:shadow-lg hover:-translate-y-0.5 active:shadow active:scale-98 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-800/10"
-                  style={{ WebkitTapHighlightColor: "transparent", minHeight: "3.25rem" }}
-                >
-                  <span>Discover the Collection</span>
-                  <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" />
-                </a>
-              </div>
+                {storyContent.title}
+              </h2>
+
+              {/* Decorative Line */}
+              <div className="w-16 h-0.5 bg-gray-900 mb-6" />
+
+              {/* Description */}
+              <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-md">
+                {storyContent.description}
+              </p>
+
+              {/* CTA Button */}
+              <a
+                href="/collection"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 text-white font-medium text-sm uppercase tracking-wider rounded-none transition-all duration-300 hover:bg-gray-800 hover:gap-3 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                <span>Shop Collection</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
-            {/* RIGHT: Large Static Image (slightly overlapped by small left image using negative margin on lg+) */}
-            <div className="relative flex justify-center items-center min-h-[28rem] lg:min-h-[36rem]">
+          </div>
+
+          {/* RIGHT SIDE: Images (Large + Small Overlapping) */}
+          <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end">
+            <div className="relative">
+              {/* Main Large Image */}
               <div
-                className="relative rounded-3xl overflow-hidden shadow-2xl bg-neutral-100 border border-neutral-200"
+                className="relative rounded-3xl overflow-hidden shadow-2xl"
                 style={{
-                  height: "32rem",
-                  width: "21rem",
+                  width: "420px",
+                  height: "580px",
                 }}
               >
                 <img
                   src={storyContent.lifestyleImage}
                   alt="Model in latest editorial collection"
-                  className="w-full h-full object-cover rounded-3xl"
+                  className="w-full h-full object-cover"
                   draggable={false}
-                  style={{ userSelect: "none" }}
                 />
-                <div className="absolute inset-0 border border-neutral-200/70 rounded-3xl pointer-events-none" />
-                {/* Small image overlap for LG screens (empty absolutely positioned block to create overlap/buffer) */}
-                <div className="hidden lg:block absolute -left-14 top-10 w-14 h-40 bg-transparent" />
+                <div className="absolute inset-0 ring-1 ring-black/5 rounded-3xl pointer-events-none" />
               </div>
+
+              {/* Small Floating Image - Overlapping from Left-Top */}
+              <motion.div
+                variants={FLOAT_VARIANT}
+                animate="animate"
+                className="absolute -left-40 top-16 z-20 shadow-2xl rounded-2xl overflow-hidden"
+                style={{
+                  width: "300px",
+                  height: "400px",
+                }}
+              >
+                <img
+                  src={storyContent.accentImage}
+                  alt="Editorial fashion highlight"
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+                <div className="absolute inset-0 ring-2 ring-white rounded-2xl pointer-events-none" />
+                <div className="absolute inset-0 ring-1 ring-black/10 rounded-2xl pointer-events-none" />
+              </motion.div>
+
+              {/* Decorative Element Behind */}
+              <div className="absolute -bottom-6 -right-6 w-full h-full bg-gray-100 rounded-3xl -z-10" />
             </div>
           </div>
-          {/* Section Underline/Accent Divider (like Most Purchased) */}
-          <div className="w-full flex justify-start mt-12 select-none">
-            <div className="h-[2px] w-[120px] sm:w-[190px] rounded-full bg-gradient-to-r from-transparent via-neutral-300/70 to-transparent" />
-          </div>
+
         </div>
-      </section>
-    </>
+
+        {/* Bottom Decorative Divider */}
+        <div className="mt-20 flex justify-center">
+          <div className="h-px w-48 bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+        </div>
+      </div>
+    </section>
   );
 };
 

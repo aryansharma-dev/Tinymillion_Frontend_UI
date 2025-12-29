@@ -8,6 +8,7 @@ import FeaturedMiniStores from '../components/FeaturedMiniStores'
 import usePageMetadata from '../hooks/usePageMetadata'
 import FlashSale from '../components/FlashSale'
 import BrandAndArrivalsSection from '../components/BrandAndArrivalsSection'
+import WhatOurCustomersSay from '../components/WhatOurCustomersSay'
 import { motion } from 'framer-motion'
 import { TrendingUp, Shield, Truck, RotateCcw, Headphones, Award } from 'lucide-react'
 
@@ -89,6 +90,9 @@ const Home = () => {
           <BestSeller />
         </div>
       </section>
+
+      {/* What Our Customers Say */}
+      <WhatOurCustomersSay />
 
       {/* Why Choose Us */}
       <section className="container mx-auto px-4 py-16">

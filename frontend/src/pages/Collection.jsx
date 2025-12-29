@@ -127,18 +127,18 @@ const Collection = () => {
   const activeFiltersCount = category.length + subCategory.length + (priceRange[0] !== 0 || priceRange[1] !== 10000 ? 1 : 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-[1400px] mx-auto px-4">
+    <div className="min-h-screen bg-white py-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Mobile Filter Toggle */}
         <div className="lg:hidden mb-6 flex items-center justify-between">
           <button
             onClick={() => setShowFilter(!showFilter)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-none hover:bg-gray-50 transition-colors"
           >
-            <SlidersHorizontal className="w-5 h-5" />
-            <span className="font-medium">Filters</span>
+            <SlidersHorizontal className="w-4 h-4 text-gray-700" />
+            <span className="font-medium text-sm text-gray-700">Filters</span>
             {activeFiltersCount > 0 && (
-              <span className="bg-black text-white text-xs px-2 py-0.5 rounded-full">
+              <span className="bg-black text-white text-[10px] px-2 py-0.5 rounded-full font-semibold">
                 {activeFiltersCount}
               </span>
             )}
@@ -150,40 +150,40 @@ const Collection = () => {
           <aside
             className={`
               fixed lg:sticky top-0 left-0 h-screen lg:h-[calc(100vh-2rem)] 
-              w-[280px] bg-white border-r border-gray-200 
-              overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100
-              z-50 lg:z-0 transition-transform duration-300
+              w-[280px] bg-white border-r border-gray-100 
+              overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent
+              z-50 lg:z-0 transition-transform duration-300 ease-in-out
               ${showFilter ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}
           >
             {/* Mobile Close Button */}
-            <div className="lg:hidden sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
-              <h3 className="font-semibold text-lg">Filters</h3>
+            <div className="lg:hidden sticky top-0 bg-white border-b border-gray-100 p-5 flex items-center justify-between z-10">
+              <h3 className="font-semibold text-base tracking-wide">Filters</h3>
               <button
                 onClick={() => setShowFilter(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="p-2 hover:bg-gray-50 rounded-lg transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-gray-600" />
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 lg:p-7 space-y-8">
               {/* Clear All Filters */}
               {activeFiltersCount > 0 && (
                 <button
                   onClick={clearAllFilters}
-                  className="w-full text-sm text-red-600 hover:text-red-700 font-medium text-left"
+                  className="w-full text-xs text-gray-600 hover:text-gray-900 font-medium text-left uppercase tracking-wider transition-colors pb-2 border-b border-gray-100"
                 >
                   Clear all filters ({activeFiltersCount})
                 </button>
               )}
 
               {/* Categories */}
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="font-semibold text-sm uppercase tracking-wide mb-4 text-gray-900">
+              <div className="border-b border-gray-100 pb-7">
+                <h3 className="font-semibold text-xs uppercase tracking-wider mb-5 text-gray-900">
                   Categories
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   {['Men', 'Women', 'Kids', 'Jewellery'].map(c => (
                     <label key={c} className="flex items-center gap-3 cursor-pointer group">
                       <input
@@ -191,9 +191,9 @@ const Collection = () => {
                         value={c}
                         checked={category.includes(c)}
                         onChange={e => toggleValue(e.target.value, setCategory)}
-                        className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black focus:ring-offset-0"
+                        className="w-4 h-4 rounded border-gray-300 text-black focus:ring-1 focus:ring-black focus:ring-offset-0 cursor-pointer"
                       />
-                      <span className="text-sm text-gray-700 group-hover:text-black transition-colors">
+                      <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">
                         {c}
                       </span>
                     </label>
@@ -202,11 +202,11 @@ const Collection = () => {
               </div>
 
               {/* Types */}
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="font-semibold text-sm uppercase tracking-wide mb-4 text-gray-900">
+              <div className="border-b border-gray-100 pb-7">
+                <h3 className="font-semibold text-xs uppercase tracking-wider mb-5 text-gray-900">
                   Type
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   {['Topwear', 'Bottomwear', 'Winterwear', 'Girlish'].map(sc => (
                     <label key={sc} className="flex items-center gap-3 cursor-pointer group">
                       <input
@@ -214,9 +214,9 @@ const Collection = () => {
                         value={sc}
                         checked={subCategory.includes(sc)}
                         onChange={e => toggleValue(e.target.value, setSubCategory)}
-                        className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black focus:ring-offset-0"
+                        className="w-4 h-4 rounded border-gray-300 text-black focus:ring-1 focus:ring-black focus:ring-offset-0 cursor-pointer"
                       />
-                      <span className="text-sm text-gray-700 group-hover:text-black transition-colors">
+                      <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">
                         {sc}
                       </span>
                     </label>
@@ -225,39 +225,44 @@ const Collection = () => {
               </div>
 
               {/* Price Range */}
-              <div className="pb-6">
-                <h3 className="font-semibold text-sm uppercase tracking-wide mb-4 text-gray-900">
+              <div className="pb-2">
+                <h3 className="font-semibold text-xs uppercase tracking-wider mb-5 text-gray-900">
                   Price Range
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div className="flex items-center gap-3">
                     <input
                       type="number"
                       value={priceRange[0]}
                       onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-black focus:border-black"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-black focus:border-black transition-all bg-white"
                       placeholder="Min"
                     />
-                    <span className="text-gray-500">-</span>
+                    <span className="text-gray-400 text-sm">-</span>
                     <input
                       type="number"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 10000])}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-black focus:border-black"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-black focus:border-black transition-all bg-white"
                       placeholder="Max"
                     />
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="10000"
-                    step="100"
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-black"
-                  />
-                  <p className="text-xs text-gray-600">
-                    ₹{priceRange[0]} - ₹{priceRange[1]}
+                  <div className="relative">
+                    <input
+                      type="range"
+                      min="0"
+                      max="10000"
+                      step="100"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                      className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer price-slider"
+                      style={{
+                        background: `linear-gradient(to right, #000 0%, #000 ${(priceRange[1] / 10000) * 100}%, #e5e7eb ${(priceRange[1] / 10000) * 100}%, #e5e7eb 100%)`
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 font-medium">
+                    ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -275,17 +280,17 @@ const Collection = () => {
           {/* RIGHT: Products Section */}
           <main className="flex-1 overflow-y-auto">
             {/* Header with Sort */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 bg-white p-4 rounded-lg border border-gray-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-transparent">
               <div>
                 <Title text1={'ALL'} text2={'COLLECTIONS'} />
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-xs text-gray-500 mt-2 uppercase tracking-wider font-medium">
                   Showing {filteredProducts.length} products
                 </p>
               </div>
               <select
                 onChange={e => setSortType(e.target.value)}
                 value={sortType}
-                className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium focus:ring-2 focus:ring-black focus:border-black bg-white"
+                className="px-4 py-2.5 border border-gray-200 rounded-none text-sm font-medium focus:ring-1 focus:ring-black focus:border-black bg-white text-gray-700 cursor-pointer transition-all"
               >
                 <option value="relavent">Sort by: Relevant</option>
                 <option value="low-high">Price: Low to High</option>
@@ -295,7 +300,7 @@ const Collection = () => {
 
             {/* Products Grid */}
             {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
                 {filteredProducts.map((item) => {
                   if (!item || !item?._id) {
                     return null;
@@ -315,27 +320,28 @@ const Collection = () => {
                       reviews={item.reviews || Math.floor(Math.random() * 500) + 50}
                       colors={item.colors || []}
                       sizes={item.sizes || ['S', 'M', 'L', 'XL']}
+                      category={item.category || ''}
                     />
                   );
                 })}
               </div>
             ) : (
               // Empty State
-              <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-lg border border-gray-200">
-                <div className="w-32 h-32 mb-6 text-gray-300">
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <div className="w-24 h-24 mb-6 text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2 tracking-wide">
                   No Products Found
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-sm text-gray-500 mb-8 max-w-sm">
                   Try adjusting your filters or search terms
                 </p>
                 <button
                   onClick={clearAllFilters}
-                  className="bg-black hover:bg-gray-800 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+                  className="bg-black hover:bg-gray-800 text-white px-8 py-3 text-sm font-medium transition-colors uppercase tracking-wider rounded-none"
                 >
                   Clear All Filters
                 </button>

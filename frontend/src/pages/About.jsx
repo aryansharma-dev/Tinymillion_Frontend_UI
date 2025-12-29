@@ -1,7 +1,7 @@
-import Title from '../components/Title'
 import { assets } from '../assets/assets'
 import NewsletterBox from '../components/NewsletterBox'
 import usePageMetadata from '../hooks/usePageMetadata'
+import { Play, Package, Truck, ShieldCheck, Award } from 'lucide-react'
 
 const About = () => {
   usePageMetadata({
@@ -24,60 +24,246 @@ const About = () => {
   })
 
   return (
-    <div>
-
-      <div className='text-2xl text-center pt-8 border-t'>
-          <Title text1={'ABOUT'} text2={'US'} />
+    <div className="bg-white">
+      {/* Breadcrumb */}
+      <div className="bg-gray-50 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <a href="/" className="hover:text-gray-900">Home</a>
+            <span>/</span>
+            <span className="text-gray-900">About us</span>
+          </div>
+        </div>
       </div>
 
-      <div className='my-10 flex flex-col md:flex-row gap-16'>
-          <picture className='block w-full md:max-w-[450px]'>
-            <source
-              srcSet={`${assets.about_img_480w} 480w, ${assets.about_img_768w} 768w, ${assets.about_img} 1200w`}
-              sizes='(max-width: 768px) 100vw, 450px'
-              type='image/webp'
-            />
-            <img
-              className='w-full md:max-w-[450px] h-auto'
-              src={assets.about_img_png}
-              srcSet={`${assets.about_img_png} 1200w`}
-              alt="TinyMillion design studio team collaborating"
-              loading='lazy'
-              decoding='async'
-            />
-          </picture>
-          <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600'>
-              <p>TinyMillion is more than just a clothing brand — it&rsquo;s a movement that celebrates individuality, confidence, and modern living.
-Founded with a vision to redefine everyday fashion, TinyMillion curates handpicked collections that combine timeless style with today&rsquo;s trends.
-From classic staples to bold statements, our designs are made to empower — whether you&apos;re dressing for comfort, ambition, or creativity.
-We believe fashion is not just about what you wear, but how it makes you feel.</p>
-              <b className='text-gray-800'>Our Mission</b>
-              <p>At TinyMillion, our mission is to make premium-quality fashion accessible, effortless, and expressive.
-We aim to deliver a seamless shopping experience with designs that resonate with your lifestyle — from the street to the spotlight.</p>
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left: Images */}
+          <div className="relative">
+            <div className="grid grid-cols-2 gap-4">
+              {/* Small Image - Top Left */}
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=500&fit=crop"
+                  alt="Fashion model"
+                  className="w-full h-64 object-cover rounded-lg"
+                  loading="lazy"
+                />
+              </div>
+              {/* Large Image - Center */}
+              <div className="row-span-2">
+                <img
+                  src="https://images.unsplash.com/photo-1516826957135-700dedea698c?w=400&h=600&fit=crop"
+                  alt="Fashion design"
+                  className="w-full h-full object-cover rounded-lg"
+                  loading="lazy"
+                />
+              </div>
+              {/* Empty space for layout balance */}
+              <div></div>
+            </div>
           </div>
+
+          {/* Right: Content */}
+          <div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              Quality, Consciousness and<br />Versatile Design.
+            </h1>
+            <p className="text-gray-600 leading-relaxed mb-6">
+              Over 25 years of experience, we have crafted thousands of strategic discovery process that enables us to peel back the layers which enable us to understand, connect, represent and dominate your market.
+            </p>
+            <button className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium rounded-lg transition">
+              <Play className="w-4 h-4" />
+              Play video
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className=' text-xl py-4'>
-          <Title text1={'WHY'} text2={'CHOOSE US'} />
+      {/* Timeline Section */}
+      <div className="bg-gray-50 py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            TinyMillion Big Moments - 1975
+          </h2>
+          
+          <div className="space-y-16">
+            {/* Timeline Item 1 */}
+            <div className="relative">
+              <div className="flex items-start gap-8">
+                <div className="flex-shrink-0 w-32 text-right">
+                  <span className="text-sm text-gray-500">12 July, 1975</span>
+                </div>
+                <div className="flex-shrink-0 w-3 h-3 rounded-full bg-gray-900 mt-2 relative">
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2 w-px h-32 bg-gray-300"></div>
+                </div>
+                <div className="flex-1 pb-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">1975</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica craft beer labore wes anderson cred.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Timeline Item 2 */}
+            <div className="relative">
+              <div className="flex items-start gap-8">
+                <div className="flex-shrink-0 w-32"></div>
+                <div className="flex-shrink-0 w-3 h-3 rounded-full bg-gray-900 mt-2 relative">
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2 w-px h-32 bg-gray-300"></div>
+                </div>
+                <div className="flex-1 pb-8">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-bold text-gray-900">1999</h3>
+                    <span className="text-sm text-gray-500">25 July, 2022</span>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">
+                    Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Timeline Item 3 */}
+            <div className="relative">
+              <div className="flex items-start gap-8">
+                <div className="flex-shrink-0 w-32 text-right">
+                  <span className="text-sm text-gray-500">18 Jun, 2023</span>
+                </div>
+                <div className="flex-shrink-0 w-3 h-3 rounded-full bg-gray-900 mt-2 relative">
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2 w-px h-32 bg-gray-300"></div>
+                </div>
+                <div className="flex-1 pb-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">2010</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Timeline Item 4 */}
+            <div className="relative">
+              <div className="flex items-start gap-8">
+                <div className="flex-shrink-0 w-32"></div>
+                <div className="flex-shrink-0 w-3 h-3 rounded-full bg-gray-900 mt-2"></div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-bold text-gray-900">2021</h3>
+                    <span className="text-sm text-gray-500">25 July, 2022</span>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">
+                    Nullam id dolor id nibh ultricies vehicula ut id elit. Donec sed odio dui. Integer posuere erat a ante venenatis.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className='flex flex-col md:flex-row text-sm mb-20'>
-          <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-            <b>Quality You Can Trust </b>
-            <p className=' text-gray-600'>Every TinyMillion product is crafted with precision and care, meeting our uncompomising quality standards - because you deserve the best.</p>
+      {/* Features Section */}
+      <div className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Feature 1 */}
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
+                <Package className="w-10 h-10 text-gray-700" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Biodegradable Packaging</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                It is a long established fact that reader will be distract the readable content looking at its layout.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
+                <Award className="w-10 h-10 text-gray-700" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">100% Fair Trade</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                These many variations of passages lorem Ipsum available but the majority have suffered alteration in some form.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
+                <ShieldCheck className="w-10 h-10 text-gray-700" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Biodegradable Packaging</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                It is a long established fact that reader will be distract the readable content looking at its layout.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
+                <Package className="w-10 h-10 text-gray-700" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Biodegradable Packaging</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                It is a long established fact that reader will be distract the readable content looking at its layout.
+              </p>
+            </div>
           </div>
-          <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-            <b>Effortless Shopping Experience </b>
-            <p className=' text-gray-600'>With an intuitive interface and fast checkout, finding your perfect style has never been easier. Fashion, just a few clicks away.</p>
-          </div>
-          <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-            <b>Dedicated Customer Support</b>
-            <p className=' text-gray-600'>From product queries to post-purchase help, our team is here for you — every step of the way. Your satisfaction is our promise.</p>
-          </div>
+        </div>
       </div>
 
+      {/* Testimonial Section */}
+      <div className="relative py-20 overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1600&h=900&fit=crop')",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/60"></div>
+        </div>
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-white mb-8">What Our Customer Say</h2>
+          
+          <div className="flex justify-center gap-1 mb-6">
+            {[...Array(5)].map((_, i) => (
+              <svg key={i} className="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+              </svg>
+            ))}
+          </div>
+          
+          <p className="text-white text-lg leading-relaxed mb-8 max-w-3xl mx-auto">
+            Amazing theme and really amazing support! Just review the demo and understand all our great features that theme comes with. But more than that the support is incredible. My questions were replied to immediately and my issues were resolved within the hour! Truly although happened me no wonderful as there are gift sheet! I truly thought I am definitely won't completely enjoy what an experience with friends and wouldn't certainly be recommend!
+          </p>
+          
+          <div>
+            <p className="text-white font-bold text-lg mb-1">JOHN FLORENCE</p>
+            <p className="text-gray-300 text-sm">CEO - Xstore</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Brand Logos */}
+      <div className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-center justify-center gap-12">
+            <div className="text-2xl font-bold text-gray-400">BEAN SHOP</div>
+            <div className="text-2xl font-bold text-gray-400">SCANDINAVIA</div>
+            <div className="text-2xl font-bold text-gray-400">APPGAMES</div>
+            <div className="text-2xl font-bold text-gray-400">BIG DADDY</div>
+            <div className="text-2xl font-bold text-gray-400">BY FETA</div>
+            <div className="text-2xl font-bold text-gray-400">OAK BARK</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Newsletter */}
       <NewsletterBox/>
-      
     </div>
   )
 }

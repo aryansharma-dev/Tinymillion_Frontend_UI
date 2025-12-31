@@ -231,8 +231,8 @@ const About = () => {
           </p>
           
           <div>
-            <p className="text-white font-bold text-lg mb-1">JOHN FLORENCE</p>
-            <p className="text-gray-300 text-sm">CEO - Xstore</p>
+            <p className="text-white font-bold text-lg mb-1">ARYAN SHARMA</p>
+            <p className="text-gray-300 text-sm">CEO - TinyMillion</p>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import usePageMetadata from '../hooks/usePageMetadata'
 import FlashSale from '../components/FlashSale'
 import BrandAndArrivalsSection from '../components/BrandAndArrivalsSection'
 import WhatOurCustomersSay from '../components/WhatOurCustomersSay'
+import Hero from '../components/Hero'
 import { motion } from 'framer-motion'
 import { TrendingUp, Shield, Truck, RotateCcw, Headphones, Award } from 'lucide-react'
 
@@ -64,8 +65,8 @@ const Home = () => {
 
   return (
     <div>
-      {/* Hero Slider */}
-      <HeroSlider />
+      {/* Hero */}
+      <Hero/>
 
       {/* Category Grid */}
       <CategoryGrid />
